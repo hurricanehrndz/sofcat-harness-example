@@ -18,15 +18,10 @@ The rules behind all of it are in the
 
 ## Requirements
 
-Every template here is a file named by `template_file`, which sofcat v2.3.0
-does not have.
-[sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98) added it.
-`build.sh` passes `--trees` to `makecatalogs zip-item`, which
-[sofcat PR #104](https://github.com/hurricanehrndz/sofcat/pull/104) added.
-The files in `policy/` need the write roots policy of
-[sofcat PR #101](https://github.com/hurricanehrndz/sofcat/pull/101).
-Until a release carries all three, build sofcat and `makecatalogs` from
-`main`.
+This repository needs sofcat and `makecatalogs` v3.0.0 or later. Every
+template here is a file named by `template_file`, `build.sh` runs
+`makecatalogs build`, and the files in `policy/` need the write roots
+policy. v3.0.0 is the first release with all three.
 
 The config placements are macOS only. The skill and plugin placements also
 carry Windows paths, which nobody has run on a device yet. Treat every path
@@ -39,10 +34,10 @@ directories it reads.
 |---|---|
 | `placements.yaml` | Where items land and which files sofcat renders beside them |
 | `templates/` | One template per rendered file |
-| `items/` | One package-info stub per item, the input to `makecatalogs zip-item` |
-| `item-trees/<item>/<placement>/<os>/` | The tree each item places |
+| `items/` | One package-info stub per item, with the placements it goes in |
+| `item-trees/<item>/` | The tree each item places, the same in every placement and OS |
 | `manifests/site_default.yaml` | Which items are managed and which are optional |
-| `conditions/10-example-facts` | The fact script a device needs |
+| `conditions/darwin/10-example-facts` | The fact script a Mac needs, delivered by the repository |
 | `write-roots.example.yaml` | The write roots `placements.yaml` needs |
 | `policy/` | The same roots as managed policy: a macOS profile and a Group Policy template |
 | `build.sh` | Builds the repository a device reads into `public/` |
@@ -66,7 +61,7 @@ enables it for everyone.
 `sofcat` is a skill about this repository. It tells a coding agent how to
 add, change and publish items in a store laid out like this one. It is
 optional, so the people who maintain the store add it from the self-service
-app. Its source is `item-trees/sofcat/claude-code-skills/darwin/SKILL.md`.
+app. Its source is `item-trees/sofcat/SKILL.md`.
 
 The two config items exist to hold their placements. sofcat removes a
 placement file when its template renders nothing, and every template here is
@@ -125,13 +120,13 @@ naming the same path, so check that yourself. `managed-settings.json` and the `m
 files, so they can belong to separate placements.
 
 **Facts come from a script on the device.** The templates read
-`assigned_user` and `memberof`. sofcat has neither built in. A script in
-`<data dir>/conditions` prints them as JSON, and
-`conditions/10-example-facts` is a sketch of one for macOS. A template that
-reads a missing fact fails to render, and sofcat leaves the existing file
-alone. `check_facts` in `placements.yaml` gives `makecatalogs -check` values
+`assigned_user` and `memberof`. sofcat has neither built in. A script prints
+them as JSON, and `conditions/darwin/10-example-facts` is a sketch of one for
+macOS. The repository delivers it, so every Mac that reads this repository
+runs it as root. A template that reads a missing fact fails to render, and
+sofcat leaves the existing file alone. `check_facts` in `placements.yaml` gives `makecatalogs -check` values
 to render with. See
-[Admin-provided facts](https://sofcat.app/guides/conditions/#admin-provided-facts).
+[Scripts from the repository](https://sofcat.app/guides/conditions/#scripts-from-the-repository).
 
 **Whitespace matters in TOML templates.** sofcat rewrites a `.json` output in
 canonical form, so only the values in the template count. It writes any other
@@ -149,9 +144,11 @@ placed copy from `.Placement.Root` and the item's name.
 MAKECATALOGS=/path/to/makecatalogs ./build.sh
 ```
 
-This packs each item's trees into zips under `public/packages/harness/`,
-writes `public/catalogs/harness.yaml` and runs `makecatalogs -check` on the
-result. CI does the same on every push and pull request.
+This runs `makecatalogs build`, which packs each item's tree into zips
+under `public/packages/harness/` for every placement in its `placements:`,
+writes `public/catalogs/harness.yaml` and `public/catalogs/conditions.yaml`,
+and checks the result. It wipes `public/` first. CI does the same on every
+push and pull request.
 
 ## Point a device at it
 
@@ -167,9 +164,9 @@ catalogs:
   - harness
 ```
 
-Install `conditions/10-example-facts` in the data directory's `conditions`
-folder first, owned by root and mode 0755. Without it the config templates
-fail to render and sofcat writes no config file.
+A Mac fetches `conditions/darwin/10-example-facts` at the start of each
+managed run. Until it has, the config templates fail to render and sofcat
+writes no config file.
 
 ## License
 

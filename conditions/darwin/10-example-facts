@@ -1,8 +1,8 @@
 #!/bin/sh
-# Admin fact script: prints the two facts the templates read. Install it
-# root-owned, mode 0755, in the conditions folder of sofcat's data directory
-# (/Library/Application Support/<Name>/Data/conditions). macOS only.
-# https://sofcat.app/guides/conditions/#admin-provided-facts
+# Admin fact script: prints the two facts the templates read. macOS only.
+# The repository delivers it: makecatalogs lists it in
+# catalogs/conditions.yaml, and sofcat syncs it to each Mac before the
+# managed run. https://sofcat.app/guides/conditions/#scripts-from-the-repository
 #
 # assigned_user is whoever is signed in at the console, and memberof is that
 # user's groups. This is a sketch: it breaks on a group name with a space or
