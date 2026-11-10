@@ -8,7 +8,7 @@
 # naming the same path.
 #
 # makecatalogs -check renders the templates with these admin facts. On a
-# device, conditions/10-example-facts provides them.
+# device, conditions/darwin/10-example-facts provides them.
 check_facts:
   assigned_user: jdoe
   memberof: [staff, harness-beta]

@@ -1,7 +1,8 @@
-# Input to makecatalogs zip-item; build.sh packs item-trees/codex-models.
+# Input to makecatalogs build; build.sh packs item-trees/codex-models.
 item_name: codex-models
 display_name: Codex Models
 section: Harness
 description: The Codex model catalog; its placement writes Codex's config files
 catalog: harness
 version: 1.0.0
+placements: [harness-codex]

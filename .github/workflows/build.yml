@@ -13,9 +13,9 @@ jobs:
         with:
           go-version: stable
           cache: false
-      # The merge of sofcat PR #104, which names the flag --trees. Pin a release
-      # tag once one carries it.
-      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@88b7b247fe15417819c3841f5c787ca0f3d78a9b
+      # The commit of sofcat v3.0.0, the first release with makecatalogs build.
+      # go install cannot take the tag: the module path has no /v3.
+      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@6b5497afde49dbfa318101b3185edde5c78899b1
       - run: ./build.sh public
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3

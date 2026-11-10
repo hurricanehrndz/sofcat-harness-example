@@ -9,23 +9,24 @@ a push to `main` publishes it.
 
     placements.yaml                 placements: a directory per OS, plus files sofcat renders there
     templates/                      templates of those files, named by template_file
-    items/<item>.yaml               item_name, display_name, section, description, catalog, version
-    item-trees/<item>/<placement>/<darwin|windows>/   the tree the item places
+    items/<item>.yaml               item_name, display_name, section, description, catalog, version, placements
+    item-trees/<item>/              the tree the item places, the same for every placement and OS
     manifests/*.yaml                managed_installs (everyone) and optional_installs (self-service)
 
 ## Add an item
 
-1. Pick the placement from `placements.yaml`. A skill goes in a skills
-   placement, a plugin in the marketplace placement.
-2. Write `items/<item>.yaml`. Copy a neighbour. Never add an `installer`
-   block: the build writes it.
-3. Put the files in `item-trees/<item>/<placement>/<os>/`, once per placement
-   and OS the item targets. The files sit directly in that directory, with
-   no `<item>/` folder around them.
+1. Pick the placements from `placements.yaml`. A skill goes in the skills
+   placements, a plugin in the marketplace placement.
+2. Write `items/<item>.yaml`. Copy a neighbour and name the placements in
+   `placements:`. Never add an `installer` block: the build writes it.
+3. Put the files directly in `item-trees/<item>/`, with no `<item>/` folder
+   inside it. The build packs that one tree for every listed placement, on
+   every OS the placement has a path for.
 4. List the item in a manifest. Ask the user whether it is managed or
    optional if they have not said.
-5. Run `./build.sh`. Done means it exits 0. It ends with
-   `makecatalogs -check`, and its errors name the item or template at fault.
+5. Run `./build.sh`, which runs `makecatalogs build`. Done means it exits 0.
+   The build ends with a check, and its errors name the item or template at
+   fault.
 
 ## Change an item
 
