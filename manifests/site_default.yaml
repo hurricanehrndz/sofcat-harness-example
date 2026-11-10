@@ -9,3 +9,4 @@ managed_installs:
 # Offered in the self-service app.
 optional_installs:
   - example-plugin
+  - sofcat

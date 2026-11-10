@@ -45,8 +45,8 @@ directories it reads.
 
 | Placement | Items | Files it writes on macOS |
 |---|---|---|
-| `claude-code-skills` | `example-skill` | none |
-| `codex-skills` | `example-skill` | none |
+| `claude-code-skills` | `example-skill`, `sofcat` | none |
+| `codex-skills` | `example-skill`, `sofcat` | none |
 | `example-marketplace` | `example-plugin` | `<root>/.claude-plugin/marketplace.json` and `/Library/Application Support/ClaudeCode/managed-settings.d/50-example.json` |
 | `harness-claude-code` | `claude-code-config` | `/Library/Application Support/ClaudeCode/managed-settings.json` |
 | `harness-codex` | `codex-models` | `/etc/codex/config.toml` and `/etc/codex/managed_config.toml` |
@@ -56,6 +56,11 @@ skill directories. `example-plugin` is in `optional_installs`. A user adds it
 from the self-service app, and the marketplace catalog then lists it with
 `defaultEnabled: false`. Move it to `managed_installs` and the drop-in also
 enables it for everyone.
+
+`sofcat` is a skill about this repository. It tells a coding agent how to
+add, change and publish items in a store laid out like this one. It is
+optional, so the people who maintain the store add it from the self-service
+app. Its source is `rendered/sofcat/claude-code-skills/darwin/SKILL.md`.
 
 The two config items exist to hold their placements. sofcat removes a
 placement file when its template renders nothing, and every template here is
