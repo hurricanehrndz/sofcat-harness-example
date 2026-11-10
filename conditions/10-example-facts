@@ -1,0 +1,16 @@
+#!/bin/sh
+# Admin fact script: prints the two facts the templates read. Install it
+# root-owned, mode 0755, in the conditions folder of sofcat's data directory
+# (/Library/Application Support/<Name>/Data/conditions). macOS only.
+# https://sofcat.app/guides/conditions/#admin-provided-facts
+#
+# assigned_user is whoever is signed in at the console, and memberof is that
+# user's groups. This is a sketch: it breaks on a group name with a space or
+# a quote in it, and at the login window the user is root. A real script
+# would read both from your MDM or directory.
+#
+# sofcat hands every fact to each signed-in user's helper, so print nothing a
+# standard user may not see.
+user=$(stat -f %Su /dev/console)
+groups=$(id -Gn "$user" | tr ' ' '\n' | sed 's/.*/"&"/' | paste -sd, -)
+printf '{"assigned_user": "%s", "memberof": [%s]}\n' "$user" "$groups"

@@ -1,0 +1,16 @@
+{{- if .Items }}
+{
+  "name": {{ json .Placement.Vars.name }},
+  "owner": {{ json .Placement.Vars.owner }},
+  "plugins": [
+    {{- range $i, $p := .Items }}{{ if $i }},{{ end }}
+    {
+      "name": {{ json $p.Name }},
+      "source": {{ json (printf "./plugins/%s" $p.Name) }},
+      "version": {{ json $p.Version }},
+      "defaultEnabled": {{ $p.Managed }}
+    }
+    {{- end }}
+  ]
+}
+{{- end }}

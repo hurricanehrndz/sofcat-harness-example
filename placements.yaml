@@ -1,0 +1,74 @@
+# The placements of this repository: where zip items land on a device and
+# which files sofcat renders beside them. The guide is
+# https://sofcat.app/guides/zip-items/. Every value is made up.
+#
+# Every path must sit under a write root compiled into the sofcat build
+# (write-roots.example.yaml). Each target file belongs to one placement only:
+# sofcat does not stop two placements from naming the same path.
+#
+# makecatalogs -check renders the templates with these admin facts. On a
+# device, conditions/10-example-facts provides them.
+check_facts:
+  assigned_user: jdoe
+  memberof: [staff, harness-beta]
+placements:
+  # Skills: one directory per item under the root.
+  claude-code-skills:
+    paths:
+      darwin: /Library/Application Support/ClaudeCode/.claude/skills
+      windows: ${ProgramData}\ClaudeCode\.claude\skills
+    applies_to: [Claude Code]
+  # Per machine on macOS, per user on Windows, where the per-user helper
+  # places the trees.
+  codex-skills:
+    paths:
+      darwin: /etc/codex/skills
+      windows: ${USERPROFILE}\.agents\skills
+    scope:
+      windows: user
+    applies_to: [Codex]
+  # A Claude Code plugin marketplace. Plugins land in plugins/<item>. The
+  # first file is the marketplace's catalog, under the root. The second is a
+  # managed-settings drop-in that registers the marketplace and enables its
+  # managed plugins.
+  example-marketplace:
+    paths:
+      darwin: /Library/Application Support/Example/marketplace
+      windows: ${ProgramData}\Example\marketplace
+    applies_to: [Claude Code]
+    exclusive: true
+    items_dir: plugins
+    vars:
+      name: example
+      owner: {name: Example IT}
+    files:
+      - path: .claude-plugin/marketplace.json
+        template_file: templates/marketplace.json.tmpl
+      - paths:
+          darwin: /Library/Application Support/ClaudeCode/managed-settings.d/50-example.json
+          windows: ${ProgramData}\ClaudeCode\managed-settings.d\50-example.json
+        template_file: templates/marketplace-settings.json.tmpl
+  # Claude Code's managed settings, with a profile picked from the memberof
+  # fact. The item's tree lands under the brand's own directory; the file
+  # that matters is the one outside it. macOS only.
+  harness-claude-code:
+    paths:
+      darwin: /Library/Application Support/Example/harness/claude-code
+    applies_to: [Claude Code]
+    files:
+      - paths:
+          darwin: /Library/Application Support/ClaudeCode/managed-settings.json
+        template_file: templates/managed-settings.json.tmpl
+  # Codex's two config files. The item's tree carries the model catalog, and
+  # config.toml points at the placed copy. macOS only.
+  harness-codex:
+    paths:
+      darwin: /Library/Application Support/Example/harness/codex
+    applies_to: [Codex]
+    files:
+      - paths:
+          darwin: /etc/codex/config.toml
+        template_file: templates/codex-config.toml.tmpl
+      - paths:
+          darwin: /etc/codex/managed_config.toml
+        template_file: templates/codex-managed-config.toml.tmpl

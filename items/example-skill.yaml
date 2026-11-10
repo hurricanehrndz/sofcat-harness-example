@@ -1,0 +1,7 @@
+# Input to makecatalogs zip-item; build.sh packs rendered/example-skill.
+item_name: example-skill
+display_name: Example Skill
+section: Skills
+description: A skill for Claude Code and Codex
+catalog: harness
+version: 1.0.0

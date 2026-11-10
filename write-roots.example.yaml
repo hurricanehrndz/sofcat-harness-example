@@ -1,0 +1,15 @@
+# The write roots a sofcat brand needs for placements.yaml. Copy this to
+# write-roots.yaml in your brand directory and build with
+# `just brand=<dir> build`: roots are compiled in, and runtime config cannot
+# change them. A stock build writes only under its own directory, so it
+# refuses the ClaudeCode and /etc/codex paths.
+# https://sofcat.app/guides/zip-items/#write-roots
+darwin:
+  - /Library/Application Support/Example
+  - /Library/Application Support/ClaudeCode
+  - /etc/codex
+windows:
+  - ${ProgramData}\Example
+  - ${ProgramData}\ClaudeCode
+windows_user:
+  - ${USERPROFILE}\.agents

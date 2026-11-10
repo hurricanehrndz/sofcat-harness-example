@@ -1,0 +1,11 @@
+name: site_default
+catalogs:
+  - harness
+# Installed on every device and kept there.
+managed_installs:
+  - example-skill
+  - claude-code-config
+  - codex-models
+# Offered in the self-service app.
+optional_installs:
+  - example-plugin

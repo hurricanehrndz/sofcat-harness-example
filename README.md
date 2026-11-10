@@ -1,0 +1,159 @@
+# sofcat-harness-example
+
+An example [sofcat](https://sofcat.app) repository that manages Claude Code
+and Codex on a fleet. Read it, fork it, or point a test device at it. Every
+value in it is made up, so replace the URLs, group names and model names
+before you use any of it.
+
+It shows three things:
+
+1. A skill shipped as a zip item.
+2. A plugin shipped as a zip item, with a marketplace catalog that sofcat
+   renders from whatever plugins are placed.
+3. Machine-wide config files for both tools, rendered from templates and the
+   device's facts.
+
+The rules behind all of it are in the
+[zip items guide](https://sofcat.app/guides/zip-items/).
+
+## Requirements
+
+Every template here is a file named by `template_file`, which sofcat v2.3.0
+does not have. Until a release carries
+[sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98), build
+sofcat and `makecatalogs` from that branch.
+
+The config placements are macOS only. The skill and plugin placements also
+carry Windows paths, which nobody has run on a device yet. Treat every path
+as a starting point and check each tool's own documentation for the
+directories it reads.
+
+## What is in here
+
+| Path | What it is |
+|---|---|
+| `placements.yaml` | Where items land and which files sofcat renders beside them |
+| `templates/` | One template per rendered file |
+| `items/` | One package-info stub per item, the input to `makecatalogs zip-item` |
+| `rendered/<item>/<placement>/<os>/` | The tree each item places |
+| `manifests/site_default.yaml` | Which items are managed and which are optional |
+| `conditions/10-example-facts` | The fact script a device needs |
+| `write-roots.example.yaml` | The write roots a sofcat build needs |
+| `build.sh` | Builds the repository a device reads into `public/` |
+
+## Placements
+
+| Placement | Items | Files it writes on macOS |
+|---|---|---|
+| `claude-code-skills` | `example-skill` | none |
+| `codex-skills` | `example-skill` | none |
+| `example-marketplace` | `example-plugin` | `<root>/.claude-plugin/marketplace.json` and `/Library/Application Support/ClaudeCode/managed-settings.d/50-example.json` |
+| `harness-claude-code` | `claude-code-config` | `/Library/Application Support/ClaudeCode/managed-settings.json` |
+| `harness-codex` | `codex-models` | `/etc/codex/config.toml` and `/etc/codex/managed_config.toml` |
+
+`example-skill` is in `managed_installs`, so every device gets it in both
+skill directories. `example-plugin` is in `optional_installs`. A user adds it
+from the self-service app, and the marketplace catalog then lists it with
+`defaultEnabled: false`. Move it to `managed_installs` and the drop-in also
+enables it for everyone.
+
+The two config items exist to hold their placements. sofcat removes a
+placement file when its template renders nothing, and every template here is
+wrapped in `{{ if .Items }}`. Take `claude-code-config` out of the manifest
+and `managed-settings.json` goes with it.
+
+With the facts `assigned_user: jdoe` and `memberof: [staff, harness-beta]`,
+the device gets this `managed-settings.json`:
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://beta.ai.example.com/claude",
+    "ANTHROPIC_CUSTOM_HEADERS": "x-example-user: jdoe\nx-example-profile: beta"
+  },
+  "model": "example-next",
+  "permissions": {
+    "deny": [
+      "Read(./.env)"
+    ]
+  }
+}
+```
+
+and this `/etc/codex/config.toml`:
+
+```toml
+# Written by sofcat. Do not edit.
+model = "example-codex"
+model_provider = "example-gateway"
+model_catalog_json = "/Library/Application Support/Example/harness/codex/codex-models/model_catalog.json"
+
+[model_providers.example-gateway]
+name = "Example gateway"
+base_url = "https://ai.example.com/codex/v1"
+http_headers = { "x-example-user" = "jdoe" }
+```
+
+## Things to know before you copy it
+
+**Write roots are compiled in.** A sofcat build writes only under the roots
+its brand lists in `write-roots.yaml`. A stock build has one root, its own
+directory, so it refuses `/etc/codex` and
+`/Library/Application Support/ClaudeCode`. Copy `write-roots.example.yaml`
+into your brand and rebuild. See
+[Write roots](https://sofcat.app/guides/zip-items/#write-roots).
+
+**One placement per target file.** sofcat does not stop two placements from
+naming the same path, so check that yourself. `managed-settings.json` and the `managed-settings.d` drop-in are separate
+files, so they can belong to separate placements.
+
+**Facts come from a script on the device.** The templates read
+`assigned_user` and `memberof`. sofcat has neither built in. A script in
+`<data dir>/conditions` prints them as JSON, and
+`conditions/10-example-facts` is a sketch of one for macOS. A template that
+reads a missing fact fails to render, and sofcat leaves the existing file
+alone. `check_facts` in `placements.yaml` gives `makecatalogs -check` values
+to render with. See
+[Admin-provided facts](https://sofcat.app/guides/conditions/#admin-provided-facts).
+
+**Whitespace matters in TOML templates.** sofcat rewrites a `.json` output in
+canonical form, so only the values in the template count. It writes any other
+file as the template emits it. That is why the TOML templates trim with
+`{{-` and `-}}`.
+
+**Big files ship in the item tree.** A rendered placement file is limited to
+1 MiB. A real Codex model catalog is larger, so `codex-models` carries
+`model_catalog.json` in its tree, and `config.toml` builds the path to the
+placed copy from `.Placement.Root` and the item's name.
+
+## Build
+
+```sh
+MAKECATALOGS=/path/to/makecatalogs ./build.sh
+```
+
+This packs each item's trees into zips under `public/packages/harness/`,
+writes `public/catalogs/harness.yaml` and runs `makecatalogs -check` on the
+result. CI does the same on every push and pull request.
+
+## Point a device at it
+
+CI publishes `public/` from `main` to GitHub Pages, so a test device can read
+this repository as it is. Give it this `config.yaml`, or serve your own
+build over HTTP and change the two URLs:
+
+```yaml
+url: https://hurricanehrndz.github.io/sofcat-harness-example/
+url_packages: https://hurricanehrndz.github.io/sofcat-harness-example/
+manifest: site_default
+catalogs:
+  - harness
+```
+
+Install `conditions/10-example-facts` in the data directory's `conditions`
+folder first, owned by root and mode 0755. Without it the config templates
+fail to render and sofcat writes no config file.
+
+## License
+
+Apache-2.0, the same as sofcat.

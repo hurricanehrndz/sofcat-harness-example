@@ -1,0 +1,7 @@
+# Input to makecatalogs zip-item; build.sh packs rendered/example-plugin.
+item_name: example-plugin
+display_name: Example Plugin
+section: Plugins
+description: A Claude Code plugin, offered through the example marketplace
+catalog: harness
+version: 1.0.0
