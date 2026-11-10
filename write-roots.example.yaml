@@ -1,8 +1,9 @@
-# The write roots a sofcat brand needs for placements.yaml. Copy this to
-# write-roots.yaml in your brand directory and build with
-# `just brand=<dir> build`: roots are compiled in, and runtime config cannot
-# change them. A stock build writes only under its own directory, so it
-# refuses the ClaudeCode and /etc/codex paths.
+# The write roots placements.yaml needs. Copy this to write-roots.yaml in
+# your brand directory and build with `just brand=<dir> build`, which compiles
+# the roots in. Managed policy from MDM or Group Policy can add the same roots
+# to any build, a stock one included. config.yaml cannot. A stock build
+# writes only under its own directory, so without the policy it refuses every
+# path here.
 # https://sofcat.app/zip-items/placements/#write-roots
 darwin:
   - /Library/Application Support/Example

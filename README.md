@@ -23,7 +23,10 @@ does not have.
 [sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98) added it.
 `build.sh` passes `--trees` to `makecatalogs zip-item`, which
 [sofcat PR #104](https://github.com/hurricanehrndz/sofcat/pull/104) added.
-Until a release carries both, build sofcat and `makecatalogs` from `main`.
+The files in `policy/` need the write roots policy of
+[sofcat PR #101](https://github.com/hurricanehrndz/sofcat/pull/101).
+Until a release carries all three, build sofcat and `makecatalogs` from
+`main`.
 
 The config placements are macOS only. The skill and plugin placements also
 carry Windows paths, which nobody has run on a device yet. Treat every path
@@ -40,7 +43,8 @@ directories it reads.
 | `item-trees/<item>/<placement>/<os>/` | The tree each item places |
 | `manifests/site_default.yaml` | Which items are managed and which are optional |
 | `conditions/10-example-facts` | The fact script a device needs |
-| `write-roots.example.yaml` | The write roots a sofcat build needs |
+| `write-roots.example.yaml` | The write roots `placements.yaml` needs |
+| `policy/` | The same roots as managed policy: a macOS profile and a Group Policy template |
 | `build.sh` | Builds the repository a device reads into `public/` |
 
 ## Placements
@@ -103,11 +107,17 @@ http_headers = { "x-example-user" = "jdoe" }
 
 ## Things to know before you copy it
 
-**Write roots are compiled in.** A sofcat build writes only under the roots
-its brand lists in `write-roots.yaml`. A stock build has one root, its own
-directory, so it refuses `/etc/codex` and
-`/Library/Application Support/ClaudeCode`. Copy `write-roots.example.yaml`
-into your brand and rebuild. See
+**sofcat writes only under its write roots.** A stock build has one root, its
+own directory, so it refuses every path in `placements.yaml`, the ones under
+`/Library/Application Support/Example` included. There are two ways to add
+the roots in `write-roots.example.yaml`. Copy the file into your brand as
+`write-roots.yaml` and rebuild, or deliver the same roots as managed policy
+from MDM or Group Policy, which works for a stock build too.
+`policy/write-roots.mobileconfig` is a profile with the macOS roots, and
+`policy/sofcat-write-roots.admx` is a Group Policy template for the Windows
+ones. Both name the stock build, so a brand build needs its own identifier
+and name in them. sofcat reads the policy when the service starts, so restart
+the service after changing it. See
 [Write roots](https://sofcat.app/zip-items/placements/#write-roots).
 
 **One placement per target file.** sofcat does not stop two placements from

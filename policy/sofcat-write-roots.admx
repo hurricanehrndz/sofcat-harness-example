@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A Group Policy template for the write roots policy of a stock sofcat build.
+  It writes the REG_MULTI_SZ values Machine and User under
+  HKLM\SOFTWARE\Policies\SofCat\WriteRoots. For a brand build, change SofCat
+  in the key to the brand's name. Copy this file to PolicyDefinitions and
+  en-US/sofcat-write-roots.adml to PolicyDefinitions\en-US. A template cannot
+  carry the values, so type the Windows roots of write-roots.example.yaml into
+  the policy, one per line. Restart the sofcat service after the policy applies.
+  https://sofcat.app/zip-items/placements/#write-roots
+-->
+<policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <policyNamespaces>
+    <target prefix="sofcat" namespace="Example.Policies.SofCat" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_Windows10" displayName="$(string.SUPPORTED_Windows10)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="SofCat" displayName="$(string.SofCat)" />
+  </categories>
+  <policies>
+    <policy name="WriteRoots" class="Machine" displayName="$(string.WriteRoots)" explainText="$(string.WriteRoots_Explain)" presentation="$(presentation.WriteRoots)" key="SOFTWARE\Policies\SofCat\WriteRoots">
+      <parentCategory ref="SofCat" />
+      <supportedOn ref="SUPPORTED_Windows10" />
+      <elements>
+        <multiText id="Machine" valueName="Machine" />
+        <multiText id="User" valueName="User" />
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>
