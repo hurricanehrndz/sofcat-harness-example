@@ -14,7 +14,7 @@ It shows three things:
    device's facts.
 
 The rules behind all of it are in the
-[zip items guide](https://sofcat.app/guides/zip-items/).
+[zip items guide](https://sofcat.app/zip-items/overview/).
 
 ## Requirements
 
@@ -108,7 +108,7 @@ its brand lists in `write-roots.yaml`. A stock build has one root, its own
 directory, so it refuses `/etc/codex` and
 `/Library/Application Support/ClaudeCode`. Copy `write-roots.example.yaml`
 into your brand and rebuild. See
-[Write roots](https://sofcat.app/guides/zip-items/#write-roots).
+[Write roots](https://sofcat.app/zip-items/placements/#write-roots).
 
 **One placement per target file.** sofcat does not stop two placements from
 naming the same path, so check that yourself. `managed-settings.json` and the `managed-settings.d` drop-in are separate

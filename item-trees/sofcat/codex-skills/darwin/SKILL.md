@@ -47,7 +47,7 @@ reload a plugin whose version stayed the same.
 - A `.json` output is rewritten in canonical form. Any other output is
   written as the template emits it, so mind whitespace.
 
-The rules in full: https://sofcat.app/guides/zip-items/ and
+The rules in full: https://sofcat.app/zip-items/overview/ and
 https://sofcat.app/guides/conditions/.
 
 ## Publish

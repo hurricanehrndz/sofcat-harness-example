@@ -1,6 +1,6 @@
 # The placements of this repository: where zip items land on a device and
 # which files sofcat renders beside them. The guide is
-# https://sofcat.app/guides/zip-items/. Every value is made up.
+# https://sofcat.app/zip-items/overview/. Every value is made up.
 #
 # Every path must sit under a write root compiled into the sofcat build
 # (write-roots.example.yaml). Each target file belongs to one placement only:

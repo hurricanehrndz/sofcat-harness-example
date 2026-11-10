@@ -3,7 +3,7 @@
 # `just brand=<dir> build`: roots are compiled in, and runtime config cannot
 # change them. A stock build writes only under its own directory, so it
 # refuses the ClaudeCode and /etc/codex paths.
-# https://sofcat.app/guides/zip-items/#write-roots
+# https://sofcat.app/zip-items/placements/#write-roots
 darwin:
   - /Library/Application Support/Example
   - /Library/Application Support/ClaudeCode
