@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="1.0" schemaVersion="1.0">
+  <displayName>sofcat write roots</displayName>
+  <description>Adds write roots to a sofcat build.</description>
+  <resources>
+    <stringTable>
+      <string id="SofCat">SofCat</string>
+      <string id="SUPPORTED_Windows10">Windows 10 or later</string>
+      <string id="WriteRoots">Additional write roots</string>
+      <string id="WriteRoots_Explain">Adds directories under which sofcat may place zip items. The policy adds to the roots compiled into the build and cannot remove them.
+
+Enter one root per line. A machine root is an absolute path and may use ${ProgramData} and ${ProgramFiles}. A user root starts with ${USERPROFILE} or is relative to the user's home.
+
+The example store needs these machine roots:
+${ProgramData}\Example
+${ProgramData}\ClaudeCode
+
+and this user root:
+${USERPROFILE}\.agents
+
+sofcat reads the policy when its service starts, so restart the service after a change.</string>
+    </stringTable>
+    <presentationTable>
+      <presentation id="WriteRoots">
+        <multiTextBox refId="Machine">Machine roots</multiTextBox>
+        <multiTextBox refId="User">User roots</multiTextBox>
+      </presentation>
+    </presentationTable>
+  </resources>
+</policyDefinitionResources>

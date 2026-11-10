@@ -2,9 +2,10 @@
 # which files sofcat renders beside them. The guide is
 # https://sofcat.app/zip-items/overview/. Every value is made up.
 #
-# Every path must sit under a write root compiled into the sofcat build
-# (write-roots.example.yaml). Each target file belongs to one placement only:
-# sofcat does not stop two placements from naming the same path.
+# Every path must sit under a write root, compiled into the sofcat build or
+# added by managed policy (write-roots.example.yaml). Each target file
+# belongs to one placement only: sofcat does not stop two placements from
+# naming the same path.
 #
 # makecatalogs -check renders the templates with these admin facts. On a
 # device, conditions/10-example-facts provides them.

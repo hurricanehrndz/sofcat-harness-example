@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Adds the macOS write roots of write-roots.example.yaml to a stock sofcat
+  build by managed policy. The inner PayloadType is the build's identifier,
+  so change ca.hrndz.sofcat for a brand build. Replace both UUIDs and the
+  identifiers with your own. Restart the sofcat service after the profile
+  installs.
+  https://sofcat.app/zip-items/placements/#write-roots
+-->
+<plist version="1.0">
+<dict>
+  <key>PayloadType</key><string>Configuration</string>
+  <key>PayloadVersion</key><integer>1</integer>
+  <key>PayloadScope</key><string>System</string>
+  <key>PayloadIdentifier</key><string>com.example.sofcat.writeroots</string>
+  <key>PayloadUUID</key><string>6198A401-E049-406C-859F-CEE2DAEAC363</string>
+  <key>PayloadDisplayName</key><string>sofcat write roots</string>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadType</key><string>ca.hrndz.sofcat</string>
+      <key>PayloadVersion</key><integer>1</integer>
+      <key>PayloadIdentifier</key><string>com.example.sofcat.writeroots.settings</string>
+      <key>PayloadUUID</key><string>8325DB0E-55BE-4A54-9FAD-EDA1FCB508BA</string>
+      <key>WriteRoots</key>
+      <dict>
+        <key>Machine</key>
+        <array>
+          <string>/Library/Application Support/Example</string>
+          <string>/Library/Application Support/ClaudeCode</string>
+          <string>/etc/codex</string>
+        </array>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>
