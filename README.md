@@ -19,9 +19,9 @@ The rules behind all of it are in the
 ## Requirements
 
 Every template here is a file named by `template_file`, which sofcat v2.3.0
-does not have. Until a release carries
-[sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98), build
-sofcat and `makecatalogs` from that branch.
+does not have.
+[sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98) added it.
+Until a release carries it, build sofcat and `makecatalogs` from `main`.
 
 The config placements are macOS only. The skill and plugin placements also
 carry Windows paths, which nobody has run on a device yet. Treat every path
