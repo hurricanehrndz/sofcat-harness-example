@@ -7,7 +7,8 @@ before you use any of it.
 
 It shows three things:
 
-1. A skill shipped as a zip item.
+1. Two skills shipped as zip items. One has its `SKILL.md` rendered on the
+   device, worded for each tool and OS.
 2. A plugin shipped as a zip item, with a marketplace catalog that sofcat
    renders from whatever plugins are placed.
 3. Machine-wide config files for both tools, rendered from templates and the
@@ -46,8 +47,8 @@ directories it reads.
 
 | Placement | Items | Files it writes on macOS |
 |---|---|---|
-| `claude-code-skills` | `example-skill`, `sofcat` | none |
-| `codex-skills` | `example-skill`, `sofcat` | none |
+| `claude-code-skills` | `example-skill`, `example-templated-skill`, `sofcat` | none |
+| `codex-skills` | `example-skill`, `example-templated-skill`, `sofcat` | none |
 | `example-marketplace` | `example-plugin` | `<root>/.claude-plugin/marketplace.json` and `/Library/Application Support/ClaudeCode/managed-settings.d/50-example.json` |
 | `harness-claude-code` | `claude-code-config` | `/Library/Application Support/ClaudeCode/managed-settings.json` |
 | `harness-codex` | `codex-models` | `/etc/codex/config.toml` and `/etc/codex/managed_config.toml` |
@@ -57,6 +58,12 @@ skill directories. `example-plugin` is in `optional_installs`. A user adds it
 from the self-service app, and the marketplace catalog then lists it with
 `defaultEnabled: false`. Move it to `managed_installs` and the drop-in also
 enables it for everyone.
+
+`example-templated-skill` is managed too. Its tree holds `SKILL.md.tmpl`
+and no `SKILL.md`, so sofcat renders the skill on the device. The text names
+Claude Code or Codex from `.Placement.Name`, macOS or Windows from `.OS`, and
+the user in Codex's per-user Windows placement. See
+[Tree templates](https://sofcat.app/zip-items/tree-templates/).
 
 `sofcat` is a skill about this repository. It tells a coding agent how to
 add, change and publish items in a store laid out like this one. It is
