@@ -1,4 +1,4 @@
-# Input to makecatalogs zip-item; build.sh packs rendered/example-plugin.
+# Input to makecatalogs zip-item; build.sh packs item-trees/example-plugin.
 item_name: example-plugin
 display_name: Example Plugin
 section: Plugins

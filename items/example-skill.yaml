@@ -1,4 +1,4 @@
-# Input to makecatalogs zip-item; build.sh packs rendered/example-skill.
+# Input to makecatalogs zip-item; build.sh packs item-trees/example-skill.
 item_name: example-skill
 display_name: Example Skill
 section: Skills

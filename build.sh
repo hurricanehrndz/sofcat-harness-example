@@ -1,6 +1,6 @@
 #!/bin/sh
 # Builds the repository a device reads into public/ (or the directory given):
-# packs each item's rendered trees into zips, compiles the catalogs and
+# packs each item's trees into zips, compiles the catalogs and
 # checks the result. Set MAKECATALOGS to a makecatalogs that is not on PATH.
 set -eu
 out=${1:-public}
@@ -15,7 +15,7 @@ cp manifests/*.yaml "$out/manifests/"
 for item in items/*.yaml; do
   name=$(basename "$item" .yaml)
   "$mc" zip-item --placements placements.yaml --item "$item" \
-    --rendered "rendered/$name" --location-prefix packages/harness \
+    --trees "item-trees/$name" --location-prefix packages/harness \
     -o "$out" > "$out/packages-info/$name.yaml"
 done
 "$mc" "$out"

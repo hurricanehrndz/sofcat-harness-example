@@ -21,7 +21,9 @@ The rules behind all of it are in the
 Every template here is a file named by `template_file`, which sofcat v2.3.0
 does not have.
 [sofcat PR #98](https://github.com/hurricanehrndz/sofcat/pull/98) added it.
-Until a release carries it, build sofcat and `makecatalogs` from `main`.
+`build.sh` passes `--trees` to `makecatalogs zip-item`, which
+[sofcat PR #104](https://github.com/hurricanehrndz/sofcat/pull/104) added.
+Until a release carries both, build sofcat and `makecatalogs` from `main`.
 
 The config placements are macOS only. The skill and plugin placements also
 carry Windows paths, which nobody has run on a device yet. Treat every path
@@ -35,7 +37,7 @@ directories it reads.
 | `placements.yaml` | Where items land and which files sofcat renders beside them |
 | `templates/` | One template per rendered file |
 | `items/` | One package-info stub per item, the input to `makecatalogs zip-item` |
-| `rendered/<item>/<placement>/<os>/` | The tree each item places |
+| `item-trees/<item>/<placement>/<os>/` | The tree each item places |
 | `manifests/site_default.yaml` | Which items are managed and which are optional |
 | `conditions/10-example-facts` | The fact script a device needs |
 | `write-roots.example.yaml` | The write roots a sofcat build needs |
@@ -60,7 +62,7 @@ enables it for everyone.
 `sofcat` is a skill about this repository. It tells a coding agent how to
 add, change and publish items in a store laid out like this one. It is
 optional, so the people who maintain the store add it from the self-service
-app. Its source is `rendered/sofcat/claude-code-skills/darwin/SKILL.md`.
+app. Its source is `item-trees/sofcat/claude-code-skills/darwin/SKILL.md`.
 
 The two config items exist to hold their placements. sofcat removes a
 placement file when its template renders nothing, and every template here is

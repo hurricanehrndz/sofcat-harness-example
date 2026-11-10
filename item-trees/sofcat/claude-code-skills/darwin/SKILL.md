@@ -10,7 +10,7 @@ a push to `main` publishes it.
     placements.yaml                 placements: a directory per OS, plus files sofcat renders there
     templates/                      templates of those files, named by template_file
     items/<item>.yaml               item_name, display_name, section, description, catalog, version
-    rendered/<item>/<placement>/<darwin|windows>/   the tree the item places
+    item-trees/<item>/<placement>/<darwin|windows>/   the tree the item places
     manifests/*.yaml                managed_installs (everyone) and optional_installs (self-service)
 
 ## Add an item
@@ -19,7 +19,7 @@ a push to `main` publishes it.
    placement, a plugin in the marketplace placement.
 2. Write `items/<item>.yaml`. Copy a neighbour. Never add an `installer`
    block: the build writes it.
-3. Put the files in `rendered/<item>/<placement>/<os>/`, once per placement
+3. Put the files in `item-trees/<item>/<placement>/<os>/`, once per placement
    and OS the item targets. The files sit directly in that directory, with
    no `<item>/` folder around them.
 4. List the item in a manifest. Ask the user whether it is managed or

@@ -1,7 +1,7 @@
-# Input to makecatalogs zip-item; build.sh packs rendered/sofcat.
+# Input to makecatalogs zip-item; build.sh packs item-trees/sofcat.
 item_name: sofcat
 display_name: sofcat Store Skill
 section: Skills
 description: Teaches an agent to add, change and publish items in a sofcat store like this one
 catalog: harness
-version: 1.0.0
+version: 1.0.1

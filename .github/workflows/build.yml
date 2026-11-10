@@ -13,9 +13,9 @@ jobs:
         with:
           go-version: stable
           cache: false
-      # The merge of sofcat PR #98, which adds template_file. Pin a release
+      # The head of sofcat PR #104, which names the flag --trees. Pin a release
       # tag once one carries it.
-      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@a880a14b0279dcaade3ea66eef0fd6ceb18202fe
+      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@d3449b1e93c4aee70b10d1eb3ccae80340dc14c0
       - run: ./build.sh public
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
