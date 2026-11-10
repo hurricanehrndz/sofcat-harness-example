@@ -1,0 +1,8 @@
+# Input to makecatalogs build; build.sh packs item-trees/example-templated-skill.
+item_name: example-templated-skill
+display_name: Example Templated Skill
+section: Skills
+description: A skill whose SKILL.md sofcat renders on the device, worded for each tool and OS
+catalog: harness
+version: 1.0.0
+placements: [claude-code-skills, codex-skills]

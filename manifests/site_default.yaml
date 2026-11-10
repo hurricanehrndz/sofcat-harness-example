@@ -4,6 +4,7 @@ catalogs:
 # Installed on every device and kept there.
 managed_installs:
   - example-skill
+  - example-templated-skill
   - claude-code-config
   - codex-models
 # Offered in the self-service app.

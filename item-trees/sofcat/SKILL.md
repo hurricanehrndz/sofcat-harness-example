@@ -21,7 +21,8 @@ a push to `main` publishes it.
    `placements:`. Never add an `installer` block: the build writes it.
 3. Put the files directly in `item-trees/<item>/`, with no `<item>/` folder
    inside it. The build packs that one tree for every listed placement, on
-   every OS the placement has a path for.
+   every OS the placement has a path for. A file named `x.tmpl` is
+   rendered on the device into `x`, so ship one or the other, never both.
 4. List the item in a manifest. Ask the user whether it is managed or
    optional if they have not said.
 5. Run `./build.sh`, which runs `makecatalogs build`. Done means it exits 0.

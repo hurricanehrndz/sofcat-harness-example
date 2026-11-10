@@ -1,0 +1,10 @@
+{{- $tool := "Claude Code" }}{{ if eq .Placement.Name "codex-skills" }}{{ $tool = "Codex" }}{{ end -}}
+{{- $os := "macOS" }}{{ if eq .OS "windows" }}{{ $os = "Windows" }}{{ end -}}
+---
+name: example-templated-skill
+description: An example skill that sofcat renders on the device for each tool and OS. Use when asked which tool and OS this copy was written for.
+---
+
+sofcat rendered this copy of the skill for {{ $tool }} on {{ $os }}
+{{- with .User }}, for the user {{ . }}{{ end }}, from version
+{{ .Item.Version }} of the item. Answer with that sentence.
