@@ -50,18 +50,19 @@ placements:
           windows: ${ProgramData}\ClaudeCode\managed-settings.d\50-example.json
         template_file: templates/marketplace-settings.json.tmpl
   # Claude Code's managed settings, with a profile picked from the memberof
-  # fact. The item's tree lands under the brand's own directory; the file
-  # that matters is the one outside it. macOS only.
+  # fact. No paths, so no item: every managed run writes the file on every
+  # device that reads this repository, whatever its manifest. To retire the
+  # file, mark the entry ensure: absent and let the devices run before
+  # deleting it; a dropped entry leaves the file behind. macOS only.
   harness-claude-code:
-    paths:
-      darwin: /Library/Application Support/Example/harness/claude-code
-    applies_to: [Claude Code]
     files:
       - paths:
           darwin: /Library/Application Support/ClaudeCode/managed-settings.json
         template_file: templates/managed-settings.json.tmpl
-  # Codex's two config files. The item's tree carries the model catalog, and
-  # config.toml points at the placed copy. macOS only.
+  # Codex's two config files. The item's tree, under the brand's own
+  # directory, carries the model catalog, and config.toml points at the
+  # placed copy. Both templates render nothing once the placement is empty,
+  # so the files go with the item. macOS only.
   harness-codex:
     paths:
       darwin: /Library/Application Support/Example/harness/codex

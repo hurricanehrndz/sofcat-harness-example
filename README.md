@@ -19,10 +19,11 @@ The rules behind all of it are in the
 
 ## Requirements
 
-This repository needs sofcat and `makecatalogs` v3.0.0 or later. Every
+This repository needs sofcat and `makecatalogs` v3.1.0 or later. Every
 template here is a file named by `template_file`, `build.sh` runs
-`makecatalogs build`, and the files in `policy/` need the write roots
-policy. v3.0.0 is the first release with all three.
+`makecatalogs build`, the files in `policy/` need the write roots policy,
+and `harness-claude-code` is a rootless placement. v3.1.0 is the first
+release with all four.
 
 The config placements are macOS only. The skill and plugin placements also
 carry Windows paths, which nobody has run on a device yet. Treat every path
@@ -50,7 +51,7 @@ directories it reads.
 | `claude-code-skills` | `example-skill`, `example-templated-skill`, `sofcat` | none |
 | `codex-skills` | `example-skill`, `example-templated-skill`, `sofcat` | none |
 | `example-marketplace` | `example-plugin` | `<root>/.claude-plugin/marketplace.json` and `/Library/Application Support/ClaudeCode/managed-settings.d/50-example.json` |
-| `harness-claude-code` | `claude-code-config` | `/Library/Application Support/ClaudeCode/managed-settings.json` |
+| `harness-claude-code` | none (rootless) | `/Library/Application Support/ClaudeCode/managed-settings.json` |
 | `harness-codex` | `codex-models` | `/etc/codex/config.toml` and `/etc/codex/managed_config.toml` |
 
 `example-skill` is in `managed_installs`, so every device gets it in both
@@ -70,10 +71,18 @@ add, change and publish items in a store laid out like this one. It is
 optional, so the people who maintain the store add it from the self-service
 app. Its source is `item-trees/sofcat/SKILL.md`.
 
-The two config items exist to hold their placements. sofcat removes a
-placement file when its template renders nothing, and every template here is
-wrapped in `{{ if .Items }}`. Take `claude-code-config` out of the manifest
-and `managed-settings.json` goes with it.
+`harness-claude-code` has `files` and no `paths`, so it is
+[rootless](https://sofcat.app/zip-items/placements/#rootless-placements). It
+holds no item, and every managed run writes `managed-settings.json` on every
+Mac that reads this repository, whatever its manifest. The profile comes
+from the device's facts. sofcat keeps no record of the files it wrote, so
+deleting the entry leaves the file on the device. To retire it, mark the
+entry `ensure: absent`, let the devices run, then delete the entry.
+
+`harness-codex` holds `codex-models`, because the model catalog ships in its
+tree. Both Codex templates are wrapped in `{{ if .Items }}`, and sofcat
+removes a placement file when its template renders nothing. Take
+`codex-models` out of the manifest and both Codex files go with it.
 
 With the facts `assigned_user: jdoe` and `memberof: [staff, harness-beta]`,
 the device gets this `managed-settings.json`:

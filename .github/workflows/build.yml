@@ -13,9 +13,9 @@ jobs:
         with:
           go-version: stable
           cache: false
-      # The commit of sofcat v3.0.0, the first release with makecatalogs build.
+      # The commit of sofcat v3.1.0, the first release with rootless placements.
       # go install cannot take the tag: the module path has no /v3.
-      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@6b5497afde49dbfa318101b3185edde5c78899b1
+      - run: go install github.com/hurricanehrndz/sofcat/cmd/makecatalogs@89a7233026cfa7f0c6143e8b3b6bbbc1bcb8dce1
       - run: ./build.sh public
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
