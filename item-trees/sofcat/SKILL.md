@@ -7,7 +7,7 @@ A sofcat store is a repository that devices read over HTTP. Sources live in
 the layout below, `./build.sh` turns them into the published repository, and
 a push to `main` publishes it.
 
-    placements.yaml                 placements: a directory per OS, plus files sofcat renders there
+    placements.yaml                 placements: a directory per OS and/or files sofcat renders
     templates/                      templates of those files, named by template_file
     items/<item>.yaml               item_name, display_name, section, description, catalog, version, placements
     item-trees/<item>/              the tree the item places, the same for every placement and OS
@@ -15,10 +15,13 @@ a push to `main` publishes it.
 
 ## Add an item
 
-1. Pick the placements from `placements.yaml`. A skill goes in the skills
-   placements, a plugin in the marketplace placement.
-2. Write `items/<item>.yaml`. Copy a neighbour and name the placements in
-   `placements:`. Never add an `installer` block: the build writes it.
+1. Pick the placements from `placements.yaml`, among those with `paths`.
+   A skill goes in the skills placements, a plugin in the marketplace
+   placement.
+2. Write `items/<item>.yaml`, with `item_name` equal to the file name
+   without `.yaml`, or the build fails. Copy a neighbour and name the
+   placements in `placements:`. Never add an `installer` block: the build
+   writes it.
 3. Put the files directly in `item-trees/<item>/`, with no `<item>/` folder
    inside it. The build packs that one tree for every listed placement, on
    every OS the placement has a path for. A file named `x.tmpl` is
@@ -41,8 +44,16 @@ reload a plugin whose version stayed the same.
   Tell the user when a change needs a new root, because that is a change
   outside this repository.
 - Each target file belongs to one placement. Nothing checks this for you.
-- Start a placement file's template with `{{ if .Items }}`, so the file
-  goes away when the placement is empty.
+- In a placement with `paths`, start a file's template with
+  `{{ if .Items }}`, so the file goes away when the placement is empty.
+- A placement with `files` and no `paths` is rootless: no item may list
+  it, its templates see no items, and every managed run writes its files on
+  every device, whatever the manifest. Give each entry absolute `paths` per
+  OS, and vary the content with `cond` and `fact`.
+- sofcat keeps no record of the files it wrote, so deleting a `files` entry
+  leaves its file on the devices. To retire a file, set `ensure: absent` on
+  the entry and drop its template, then delete the entry once devices have
+  run.
 - `fact "name"` and `cond "expr"` read device facts. A fact that comes from
   a script on the device needs a sample value under `check_facts` in
   `placements.yaml`, or the build fails.
